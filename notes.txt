@@ -1,0 +1,32 @@
+- Expressivity
+    - Compound assignment operators
+    - Postfix, prefix increment, decrement
+    - Destructuring assignment
+    - Spread syntax
+    - Closures
+        - Can be used instead of standalone functions
+    - Functional programming inspired functions
+    - Lack of enums (negative)
+- Orthogonality
+    - Anything that is not a primitive value is an object
+        - https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Basics
+        - https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes
+    - Functions as first-class citizens (https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function)
+    - Spread syntax and destructuring assignment in different contexts
+        - Destructuring assignment + spread syntax to union arrays, merge objects and to assign arrays
+    - Arithmetic operators do not cause exceptions with strings
+- Simplicity
+    - let, const, var, none (negative)
+    - Different ways of defining a function (negative)
+    - Different ways pf handling asynchronous code
+    - Different ways of accessing object attributes
+    - Usage of # to represent private members
+- Syntax design
+    - Words that have misleading meaning (const)
+    - Words that have different meanings when put in different contexts (this)
+    - Special words as variable names?
+    - Curly braces?
+- Exception handling
+    - Exists?
+    - Try catch throw?
+    - Effect of lack of type safety
