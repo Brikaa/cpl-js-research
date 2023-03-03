@@ -52,29 +52,104 @@ operators:
 \subsection{Destructuring assignment}
 If we want to assign some values in an array to variables, we can do so with a shorthand syntax:
 \begin{verbatim}
-    let arr = [1, 2, 3]
-
+    let arr = [1, 2, 3];
     let [a, b, c] = arr; // instead of:
     a = arr[0];
     b = arr[1];
     c = arr[2];
 \end{verbatim}
 Note that the variables must be ordered in the same way the values are in the array.
-The same can be done with objects\footnote{Objects are discussed in other sections}:
+The same can be done with objects\footnote{Objects are discussed in detail in other sections}:
 \begin{verbatim}
     let obj = {
-        a: 'Hello',
-        b: 'World'
-    }
+        a: "Hello",
+        b: "World"
+    };
     let {a, b} = obj; // instead of
-    a = obj.a
-    b = obj.b
+    a = obj.a;
+    b = obj.b;
 \end{verbatim}
 Note that the variables must have the same name of the objects member names. Destructuring assignment can be used in more
 powerful ways that are discussed in other sections.
 
 \subsection{Spread syntax}
+If we want to spread an array into another array, we can do so expressively with the spread syntax:
+\begin{verbatim}
+    let a = [2,3,4];
+    console.log([1, ...a, 5, 6]);
+    // expected output: [1, 2, 3, 4, 5, 6]
+\end{verbatim}
+More powerful usages of the spread syntax are discussed in other sections.
 
+\subsection{Arrow functions}
+JavaScript uses the `function' keyword to define a function; however, a more concise syntax has been introduced in
+ES6\footnote{https://en.wikipedia.org/wiki/ECMAScript}. The new arrow function syntax is not only syntactically
+different from the traditional function syntax; there are other differences which are discussed in other sections:
+\begin{verbatim}
+    // Traditional syntax
+    function power(a) {
+        return a * a;
+    }
+
+    // Arrow function
+    const power1 = (a) => {
+        return a * a;
+    }
+
+    // The curly braces can be omitted
+    // Since the function directly returns a value
+    const power2 = (a) => a * a;
+
+    // The parentheses around the parameter
+    // can also be omitted since it is only
+    // one parameter
+    const power3 = a => a * a;
+\end{verbatim}
+
+\subsection{for..of, for..in}
+JavaScript provides expressive control statements that helps in iterating over an array:
+\begin{verbatim}
+    for (const i of [1, 2, 3, 4]) {
+        console.log(i);
+    }
+    // instead of
+    const arr = [1, 2, 3, 4];
+    for (let i = 0; i < arr.length; ++i) {
+        console.log(arr[i]);
+    }
+\end{verbatim}
+It also provides compact syntax for iterating over an Object's keys
+\begin{verbatim}
+    let person = {
+        name: "foo",
+        age: 13,
+    }
+    for (const key in person) {
+        console.log(person[key]);
+    }
+\end{verbatim}
+
+\subsection{Functions inspired by functional programming}
+JavaScript has multiple functions that are inspired by expressive functions in functional programming languages like
+Haskell. For example, the map function takes an array and a
+% TODO: Where?
+unary function\footnote{Functions can be passed as parameters to other functions, this will be discussed in } and returns
+an array that is the result of applying the function on each element in the given array:
+\begin{verbatim}
+    // Note the use of the arrow function syntax
+    // And the definition of the map function on the fly
+    let arr = [1, 2, 3].map(x => x * 2);
+    // instead of
+    let arr = [];
+    for (const i of [1, 2, 3]) {
+        arr.push(i * 2);
+    }
+\end{verbatim}
+JavaScript also has a filter function that, given an array and a unary function,
+returns a new array containing the elements on which the unary function returns true:
+\begin{verbatim}
+    const even = [1, 2, 3, 4, 5].filter(x => x % 2 == 0);
+\end{verbatim}
 
 
 \end{document}

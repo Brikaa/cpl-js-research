@@ -7,6 +7,7 @@
         - Can be used instead of standalone functions
         - Curly braces can be omitted in direct return
         - Brackets can be omitted in case of one parameters
+    - for..of, for..in
     - Functional programming inspired functions
         - map
         - filter
@@ -25,6 +26,7 @@
         - Merging objects
         - Rest parameters
     - Destructuring assignment in different contexts
+        - Iterators
         - Function parameters
     - Spread syntax and destructuring assignment in tandem
 - Simplicity
