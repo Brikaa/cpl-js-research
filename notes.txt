@@ -11,13 +11,18 @@
     - Functional programming inspired functions
         - map
         - filter
+- Type checking
+    -
 - Orthogonality
     - Objects
         - An object is the fundamental non-primitive data types in javascript
         - Collection of data types and functions
         - Prototype chain
-        - Literal object, array as object, function as object
-        - Some primitives are wrapped in objects when performing actions on them
+        - Literal object
+        - Array as object (with a relationship between integer-keyed properties and length property)
+        - Function as object (with the additional capability of being callable)
+        - Primitives are wrapped in objects when performing actions on them
+            - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Data_structures
     - Functions as first-class objects
         - Functions are also objects
         - Can be assigned to constants, passed to other functions as parameters, returned from other functions
@@ -49,13 +54,16 @@
         - Keeping/discarding member value when the name and the value are the same
         - Functions
     - Different ways of defining objects
-    - Optional semicolon
+        - Constructor
+        - Builder function
+        - Object literal
+        - Class
 - Syntax design
     - Words that have misleading meanings (let, var, const)
+    - Optional semicolon
     - Special words as variable names? (not all, for example "arguments")
     - Curly braces?
 - Exception handling
     - Exists?
     - Try catch throw?
     - Effect of lack of type safety
-- TODO: Type checking
