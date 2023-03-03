@@ -1,32 +1,59 @@
 - Expressivity
     - Compound assignment operators
     - Postfix, prefix increment, decrement
-    - Destructuring assignment
-    - Spread syntax
-    - Closures
+    - Destructuring assignment (showcase with normal variables)
+    - Spread syntax (showcase with normal variables)
+    - Arrow functions expression
         - Can be used instead of standalone functions
+        - Curly braces can be omitted in direct return
+        - Brackets can be omitted in case of one parameters
     - Functional programming inspired functions
-    - Lack of enums (negative)
+        - map
+        - filter
 - Orthogonality
-    - Anything that is not a primitive value is an object
-        - https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Basics
-        - https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Objects/Object_prototypes
-    - Functions as first-class citizens (https://developer.mozilla.org/en-US/docs/Glossary/First-class_Function)
-    - Spread syntax and destructuring assignment in different contexts
-        - Destructuring assignment + spread syntax to union arrays, merge objects and to assign arrays
-    - Arithmetic operators do not cause exceptions with strings
+    - Objects
+        - An object is the fundamental non-primitive data types in javascript
+        - Collection of data types and functions
+        - Prototype chain
+        - Literal object, array as object, function as object
+        - Some primitives are wrapped in objects when performing actions on them
+    - Functions as first-class objects
+        - Functions are also objects
+        - Can be assigned to constants, passed to other functions as parameters, returned from other functions
+    - Spread syntax in different contexts
+        - Merging arrays
+        - Merging objects
+        - Rest parameters
+    - Destructuring assignment in different contexts
+        - Function parameters
+    - Spread syntax and destructuring assignment in tandem
 - Simplicity
-    - let, const, var, none (negative)
-    - Different ways of defining a function (negative)
-    - Different ways pf handling asynchronous code
-    - Different ways of accessing object attributes
-    - Usage of # to represent private members
+    - `this` keyword
+        - `this` keyword is used to refer to the current object
+        - Using the `new` operator `this` is bound to an empty object
+        - In normal functions `this` is bound to the object before the dot
+        - In arrow functions `this` is bound to the enclosing context from which the function was called
+        - https://stackabuse.com/arrow-functions-in-javascript/`
+    - Different ways of defining variables (let, const, var, none)
+    - Different ways of defining a function
+        - Traditional function
+        - Method
+        - Arrow function
+        - Arrow function without return in direct return
+        - Arrow function without brackets in single parameters
+    - Different ways of handling asynchronous code
+    - Different ways of accessing/setting object members
+        - Member name with/without quotations
+        - Keeping/discarding member value when the name and the value are the same
+        - Functions
+    - Different ways of defining objects
+    - Optional semicolon
 - Syntax design
-    - Words that have misleading meaning (const)
-    - Words that have different meanings when put in different contexts (this)
-    - Special words as variable names?
+    - Words that have misleading meanings (let, var, const)
+    - Special words as variable names? (not all, for example "arguments")
     - Curly braces?
 - Exception handling
     - Exists?
     - Try catch throw?
     - Effect of lack of type safety
+- TODO: Type checking

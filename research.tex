@@ -1,0 +1,80 @@
+\documentclass[11pt,a4paper]{article}
+
+\begin{document}
+\title{Evaluation of different JavaScript characteristics}
+\author{Omar Adel Brikaa \thanks{20206043 - S5 - brikaaomar@gmail.com}}
+\date{}
+\maketitle
+
+\tableofcontents
+
+\section{Introduction}
+Javascript is a dynamically-typed, multi-purpose, multi-paradigm programming language. It has been mainly used to run
+client-side code on web browsers. It has also grown into other areas of programming such as web server back-end
+programming\footnote{https://nodejs.org/en/}. Below, I evaluate some different characteristics of JavaScript including
+expressivity, orthogonality, simplicity, syntax design and exception handling.
+
+\section{Expressivity}
+Expressivity is the ability to perform multiple computations using compact syntax. Following are some examples
+of expressivity in Javascript:
+
+\subsection{Compound assignment operators}
+Like many other programming languages, JavaScript supports assigning a value to a variable based on its previous value
+without repeating the variable name. The following are equivalent pieces of code:
+\begin{verbatim}
+    a = a + 1;
+    a += 1;
+
+    b = b * 1;
+    b *= 1
+
+    c = c + " world"
+    c += " world"
+\end{verbatim}
+
+\subsection{Postfix and prefix increment, decrement}
+JavaScript also supports incrementing and decrementing variables by one without the usage of compound assignment
+operators:
+\begin{verbatim}
+    a += 1;
+    a++;
+
+    b -= 1;
+    b--;
+
+    let d = c; c += 1;
+    let d = c++;
+
+    f += 1; let e = f;
+    let e = ++f;
+\end{verbatim}
+
+\subsection{Destructuring assignment}
+If we want to assign some values in an array to variables, we can do so with a shorthand syntax:
+\begin{verbatim}
+    let arr = [1, 2, 3]
+
+    let [a, b, c] = arr; // instead of:
+    a = arr[0];
+    b = arr[1];
+    c = arr[2];
+\end{verbatim}
+Note that the variables must be ordered in the same way the values are in the array.
+The same can be done with objects\footnote{Objects are discussed in other sections}:
+\begin{verbatim}
+    let obj = {
+        a: 'Hello',
+        b: 'World'
+    }
+    let {a, b} = obj; // instead of
+    a = obj.a
+    b = obj.b
+\end{verbatim}
+Note that the variables must have the same name of the objects member names. Destructuring assignment can be used in more
+powerful ways that are discussed in other sections.
+
+\subsection{Spread syntax}
+
+
+
+\end{document}
