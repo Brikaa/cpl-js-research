@@ -1,3 +1,13 @@
+- Types
+    - JS is dynamically typed
+        - Types are determined at runtime based on the variable's value
+    - JS is weakly typed
+        - When there is types mismatch in an operation, the interpreter implicitly converts one of the types to another
+            instead of throwing a type error
+        - Known as type coercion
+    - Type checking
+        - Checks for type errors at runtime
+        - Accessing properties of null, undefined, calling non-functions
 - Expressivity
     - Compound assignment operators
     - Postfix, prefix increment, decrement
@@ -11,8 +21,6 @@
     - Functional programming inspired functions
         - map
         - filter
-- Type checking
-    -
 - Orthogonality
     - Objects
         - An object is the fundamental non-primitive data types in javascript
@@ -34,6 +42,7 @@
         - Iterators
         - Function parameters
     - Spread syntax and destructuring assignment in tandem
+    - typeof null
 - Simplicity
     - `this` keyword
         - `this` keyword is used to refer to the current object
@@ -42,6 +51,7 @@
         - In arrow functions `this` is bound to the enclosing context from which the function was called
         - https://stackabuse.com/arrow-functions-in-javascript/`
     - Different ways of defining variables (let, const, var, none)
+    - ==, ===
     - Different ways of defining a function
         - Traditional function
         - Method
@@ -54,14 +64,15 @@
         - Keeping/discarding member value when the name and the value are the same
         - Functions
     - Different ways of defining objects
-        - Constructor
+        - Constructor function
         - Builder function
         - Object literal
         - Class
 - Syntax design
     - Words that have misleading meanings (let, var, const)
     - Optional semicolon
-    - Special words as variable names? (not all, for example "arguments")
+    - Special words as variable names?
+        - Yes, but some built-in variables which can be overridden (document, arguments, window)
     - Curly braces?
 - Exception handling
     - Exists?

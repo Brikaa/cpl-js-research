@@ -3,7 +3,7 @@
 
 \begin{document}
 \title{Evaluation of different JavaScript characteristics}
-\author{Omar Adel Brikaa - 20206043 \thanks{Omar Adel Abdel Hamid Ahmed Brikaa - S5 - brikaaomar@gmail.com}}
+\author{Omar Adel Brikaa - 20206043\thanks{Omar Adel Abdel Hamid Ahmed Brikaa - S5 - brikaaomar@gmail.com}}
 \date{}
 \maketitle
 
@@ -13,12 +13,59 @@
 Javascript is a dynamically-typed, multi-purpose, multi-paradigm programming language.
 It has been mainly used to run client-side code on web browsers.
 It has also grown into other areas of programming such as web server back-end programming\footnote{https://nodejs.org/en/}.
-In this article, I evaluate some different characteristics of JavaScript including
-expressivity, type-checking, orthogonality, simplicity, syntax design and exception handling.
+In this article, I evaluate some different characteristics of JavaScript including:
+types, expressivity, orthogonality, simplicity, syntax design and exception handling.
+
+\section{Types}
+
+\subsection{Dynamic typing}
+The JavaScript interpreter assigns a variable a type at runtime based on its value.
+\begin{verbatim}
+    let a = "foo";
+    console.log(typeof a); // "string"
+    a = true;
+    console.log(typeof a); // "boolean"
+    a = 12;
+    console.log(typeof a); // "number"
+    a = { hello: "world" };
+    console.log(typeof a); // "object"
+\end{verbatim}
+When defining a function, the parameters types are determined at runtime at each call:
+\begin{verbatim}
+    function add(a, b) {
+        return a + b;
+    }
+    console.log(add(1, 2)); // 3
+    console.log(add("hello ", "world")); // hello world
+\end{verbatim}
+
+\subsection{Weak typing}
+When the types of variables mismatch, the interpreter tries to convert the type of one variable into the other.
+This is known as type coercion.
+\begin{verbatim}
+    const a = "1";
+    const b = 2;
+    console.log(a + b);
+    // "12", b was coerced into a string
+
+    const arr = [1,2,3];
+    console.log(arr.slice("1"));
+    // [2,3], "1" was coerced into a number
+\end{verbatim}
+
+\subsection{Type checking}
+When a type can not be coerced into another type, JavaScript throws a TypeError at runtime.
+\begin{verbatim}
+    const a = null;
+    a.sayHello(); // TypeError: cannot read properties of null
+
+    const b = 12;
+    b(); // TypeError: b is not a function
+\end{verbatim}
 
 \section{Expressivity}
-Expressivity is the ability to perform multiple computations using compact syntax. Following are some examples
-of expressivity in Javascript:
+Expressivity is the ability to perform multiple computations using compact syntax.
+Following are some examples of expressivity in Javascript:
 
 \subsection{Compound assignment operators}
 Like many other programming languages, JavaScript supports assigning a value to a variable based on its previous value
