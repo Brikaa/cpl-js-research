@@ -367,13 +367,61 @@ It can be used in function parameters:
 \subsection{Destructuring assignment in tandem with spread operator}
 The destructuring assignment can be used in tandem with the spread operator to
 destructure the first n items of an array and put the remaining items in a second array
-where n is the number of variables not preceded by "..." in the destructuring assignment.
+where n is the number of variables not preceded by `...' in the destructuring assignment.
 
-Consider the following recursive function that gets the last element in an array:
+Consider the following function that gets the last element in an array without using the length property nor indexing:
 \begin{verbatim}
-    const tail = ([x, ...xs]) => {
-
+    // The parameters destructure the array
+    // into the first element
+    // and a second array containing the rest
+    // of the elements
+    const last = ([x, ...xs]) => {
+        // Nothing could be destructured
+        // (empty array)
+        if (x === undefined)
+            return [];
+        // Nothing could be destructured from xs
+        // Only one element, return it
+        const [y] = xs;
+        if (y === undefined)
+            return x;
+        // Still no base cases
+        // Tail is the last of the remaining elements
+        return last(xs);
     }
+
+    console.log(last([1, 2, 3, 4, 5, 6])); // 6
+\end{verbatim}
+
+\subsection{typeof null (lack of orthogonality)}
+The `typeof' JavaScript operator returns the type of a value in a string.
+If the value is a primitive data type (\ref{objects}), it returns the name of that data type.
+If the value is a non-primitive data type, it either returns `object' or
+`function'\footnote{It does that although a function is an object, but that is another matter I will not discuss.}
+
+One special case is `typeof null' or `typeof someNullishVariable'; it returns `object'.
+This is a bug in the language's implementations that was not fixed for backward compatibility.
+`typeof null' should be null since null is a primitive data type.
+
+This leads to a lack of orthogonality when checking for nullish variables:
+\begin{verbatim}
+    for (const a of ["Hello", undefined, null, 123]) {
+        if (typeof a === "string")
+            console.log("a is a string");
+        else if (typeof a === "undefined")
+            console.log("a is undefined");
+        // Notice how we need to handle nulls
+        // differently here
+        else if (a === null)
+            console.log("a is null");
+        else
+            console.log("a is another data type");
+    }
+    // Expected output:
+    // a is a string
+    // a is undefined
+    // a is null
+    // a is another data type
 \end{verbatim}
 
 \end{document}
