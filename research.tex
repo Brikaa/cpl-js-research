@@ -510,7 +510,7 @@ returns an arrow function (\ref{functions_first_class}) which uses `this'.
 It produces the correct output since `this' got bound to `obj' in the traditional function,
 and took the value of `obj' in the returned arrow function.
 
-\subsubsection{`this' keyword with `new'}
+\subsubsection{\label{new_keyword}`this' keyword with `new'}
 When using the `this' inside a traditional function and using the `new' operator while calling this function,
 `this' gets bound to a new empty object which the function automatically returns.
 The type of function that is used solely for this purpose is known as a `constructor':
@@ -524,6 +524,193 @@ The type of function that is used solely for this purpose is known as a `constru
 
     const obj = new Obj();
     obj.sayName(); // My name is foo
+\end{verbatim}
+
+\subsection{Different ways of defining variables}
+JavaScript variables can be defined in four ways as follows:
+
+\subsubsection{Using const}
+Using the const keyword is similar to using let but the variable can not be reassigned:
+\begin{verbatim}
+    function x() {
+        for (let i = 0; i < 3; ++i) {
+            const a = 'test';
+            // a += i; is not possible
+            console.log(a);
+        }
+        // console.log(a); is not possible here
+    }
+    x();
+    // console.log(a); is not possible here
+    // Expected output:
+    // test
+    // test
+    // test
+\end{verbatim}
+
+\subsubsection{Using let}
+Using let is similar to other programming languages:
+it declares a variable which can only be seen in the block scope it was declared in.
+\begin{verbatim}
+    function x() {
+        for (let i = 0; i < 3; ++i) {
+            let a = 'test';
+            a += i; // now possible
+            console.log(a);
+        }
+        // console.log(a); is not possible here
+    }
+    x();
+    // console.log(a); is not possible here
+    // Expected output:
+    // test0
+    // test1
+    // test2
+\end{verbatim}
+
+\subsubsection{Using var}
+The var keyword declares a variable that is local to the function's scope,
+but its declaration is executed before any code is executed.
+This is known as `hoisting':
+\begin{verbatim}
+    function x() {
+        for (let i = 0; i < 3; ++i) {
+            var a = 'test';
+            a += i; // now possible
+            console.log(a);
+        }
+        console.log(a); // now possible
+    }
+    x();
+    // console.log(a); is not possible here
+    // Expected output:
+    // test0
+    // test1
+    // test2
+    // test2
+\end{verbatim}
+
+\subsubsection{Not using anything}
+Not using any keyword before declaration assigns a property to the global window object:
+\begin{verbatim}
+    function x() {
+        for (let i = 0; i < 3; ++i) {
+            a = 'test';
+            a += i; // now possible
+            console.log(a);
+        }
+        console.log(a); // now possible
+    }
+    x();
+    console.log(a); // now possible
+    // Expected output:
+    // test0
+    // test1
+    // test2
+    // test2
+    // test2
+\end{verbatim}
+
+\subsection{Equality}
+There are different ways to compare two values in JavaScript:
+
+\subsubsection{Strict equality}
+Using `===' to compare two values does not do type conversion,
+returns false when the values have different types,
+returns false when NaN is compared to NaN,
+and returns true when +0 is compared to -0.
+\begin{verbatim}
+    console.log('1' === 1); // false
+    console.log(1 === 1); // true
+    console.log(NaN === NaN); // false
+    console.log(+0 === -0); // true
+\end{verbatim}
+
+\subsubsection{Loose equality}
+Using `==' to compare two values does type conversion,
+returns false when NaN is compared to NaN,
+and return true when +0 is compared to -0.
+\begin{verbatim}
+    console.log('1' == 1); // true
+    console.log(1 == 1); // true
+    console.log(NaN == NaN); // false
+    console.log(+0 == -0); // true
+\end{verbatim}
+
+\subsubsection{Object.is()}
+Using Object.is(value1, value2) to compare two values does not do type conversions,
+returns false when the values have different types,
+returns true when NaN is compared to NaN,
+and returns false when +0 is compared to -0.
+\begin{verbatim}
+    console.log(Object.is('1', 1)); // false
+    console.log(Object.is(1, 1)); // true
+    console.log(Object.is(NaN, NaN)); // true
+    console.log(Object.is(+0, -0)); // false
+\end{verbatim}
+
+\subsection{Different ways of defining a function}
+The example in \ref{arrow_functions} shows four different ways of defining a power function in JavaScript:
+traditional function, arrow function, arrow function without braces in direct return,
+and arrow function without parentheses around the unary parameter.
+There is at least one more way of defining this function (anonymous function without arrow):
+\begin{verbatim}
+    const power = function(a) {
+        return a * a;
+    }
+\end{verbatim}
+
+\subsection{Different ways of initializing objects}
+There are different ways to initialize an object in JavaScript.
+They can be initialized using object literals (as shown in \ref{objects}),
+constructor functions (as shown in \ref{new_keyword}),
+a builder function:
+\begin{verbatim}
+    const buildPerson = (name, age) => ({
+        name,
+        age
+    });
+
+    console.log(buildPerson("foo", 13));
+    // { name: "foo", age: 13 }
+    console.log(buildPerson("bar", 23));
+    // { name: "bar", age: 23 }
+\end{verbatim}
+or a class:
+\begin{verbatim}
+    class Person {
+        constructor(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+    }
+
+    console.log(new Person("foo", 13));
+    // { name: "foo", age: 13 }
+    console.log(new Person("bar", 23));
+    // { name: "bar", age: 23 }
+\end{verbatim}
+
+\subsection{Different ways of setting members in object literals}
+The property name in object literal can be defined with or without quotations.
+However, if it contains special characters, it must be defined with quotations.
+If a property name is the same as the property value, the value can be omitted:
+\begin{verbatim}
+    const gender = "male";
+    const obj = {
+        name: "foo",
+        "age": 14,
+        "marital-status": "single",
+        gender
+    }
+\end{verbatim}
+
+\subsection{Different ways of accessing object members}
+A value of a property of an object can be accessed using the dot notation or square brackets.
+Accessing the `obj' object values in the previous section:
+\begin{verbatim}
+    console.log(obj.name); // foo
+    console.log(obj["age"]); // 14
 \end{verbatim}
 
 \end{document}
