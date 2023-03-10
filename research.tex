@@ -18,7 +18,7 @@ types, expressivity, orthogonality, simplicity, syntax design and exception hand
 
 \section{Types}
 
-\subsection{Dynamic typing}
+\subsection{\label{dynamic_typing}Dynamic typing}
 The JavaScript interpreter assigns a variable a type at runtime based on its value.
 \begin{verbatim}
     let a = "foo";
@@ -37,6 +37,16 @@ When defining a function, the parameters types are determined at runtime at each
     }
     console.log(add(1, 2)); // 3
     console.log(add("hello ", "world")); // hello world
+\end{verbatim}
+Arrays can have elements of different types:
+\begin{verbatim}
+    const arr = [1, "foo", true, { hello: "world" }];
+    arr.forEach((x) => console.log(typeof x));
+    // Expected output:
+    // number
+    // string
+    // boolean
+    // object
 \end{verbatim}
 
 \subsection{Weak typing}
@@ -121,7 +131,7 @@ The same can be done with objects\footnote{Objects are discussed in detail in ot
 Note that the variables must have the same name of the objects member names. Destructuring assignment can be used in more
 powerful ways that are discussed in other sections.
 
-\subsection{Spread syntax}
+\subsection{\label{spread_syntax}Spread syntax}
 If we want to spread an array into another array, we can do so expressively with the spread syntax:
 \begin{verbatim}
     let a = [2,3,4];
@@ -130,7 +140,7 @@ If we want to spread an array into another array, we can do so expressively with
 \end{verbatim}
 More powerful usages of the spread syntax are discussed in other sections.
 
-\subsection{Arrow functions}
+\subsection{\label{arrow_functions}Arrow functions}
 JavaScript uses the `function' keyword to define a function; however, a more concise syntax has been introduced in
 ES6\footnote{https://en.wikipedia.org/wiki/ECMAScript}. The new arrow function syntax is not only syntactically
 different from the traditional function syntax; there are other differences which are discussed in other sections:
@@ -155,7 +165,7 @@ different from the traditional function syntax; there are other differences whic
     const power3 = a => a * a;
 \end{verbatim}
 
-\subsection{for..of, for..in}
+\subsection{\label{for_of_for_in}for..of, for..in}
 JavaScript provides expressive control statements that helps in iterating over an array:
 \begin{verbatim}
     for (const i of [1, 2, 3, 4]) {
@@ -178,12 +188,12 @@ It also provides compact syntax for iterating over an Object's keys
     }
 \end{verbatim}
 
-\subsection{Functions inspired by functional programming}
+\subsection{\label{fp_functions}Functions inspired by functional programming}
 JavaScript has multiple functions that are inspired by expressive functions in functional programming languages like
-Haskell. For example, the map function takes an array and a
-% TODO: Where?
-unary function\footnote{Functions can be passed as parameters to other functions, this will be discussed in } and returns
-an array that is the result of applying the function on each element in the given array:
+Haskell.
+For example, the map function takes an array and a unary
+function\footnote{Functions can be passed as parameters to other functions, this is discussed in another section}
+and returns an array that is the result of applying the function on each element in the given array:
 \begin{verbatim}
     // Note the use of the arrow function syntax
     // And the definition of the map function on the fly
@@ -200,5 +210,170 @@ returns a new array containing the elements on which the unary function returns 
     const even = [1, 2, 3, 4, 5].filter(x => x % 2 == 0);
 \end{verbatim}
 
+\section{Orthogonality}
+Orthogonality is the ability to combine different constructs in a meaningful way without the need for special handling.
+I discuss some examples of orthogonality in JavaScript
+
+\subsection{\label{objects}Objects}
+JavaScript contains seven primitive data types: string, number, bigint, boolean, symbol, undefined and null.
+Every non-primitive data type is an object,
+and every primitive data type (except for null and undefined) has an object wrapper.
+This allows for consistency while dealing with different data types and data structures.
+
+An object is a collection of properties, and a property is an association between a name (or key) and a value.
+A property's value can be a
+function\footnote{\raggedright \url{https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_Objects}}.
+The following is an example of an object:
+\begin{verbatim}
+    const obj = {
+        name: "foo",
+        sayName() {
+            console.log("My name is " + this.name)
+        }
+    };
+
+    obj.sayName(); // My name is foo
+\end{verbatim}
+Since every non-primitive type is an object, it is worth noting that
+a function is an object with the additional capability of being callable,
+and an array is an object with iterable integer-keyed properties that determine its length.
+
+\subsection{\label{functions_first_class}Functions as first-class objects}
+Functions can be treated as any other object.
+They can be assigned to variables and constants, passed to other functions as parameters
+and returned from other functions.
+In fact, the arrow function example in \ref{arrow_functions}
+assigns an anonymous function (a function without a name) to a constant (power1, power2, power3).
+
+This is a functional programming principle known as "functions as first-class citizens".
+I have briefly hinted to this principle in \ref{fp_functions}.
+The following is an example that shows features that have been discussed in
+\ref{arrow_functions}, \ref{dynamic_typing}, \ref{for_of_for_in}, \ref{functions_first_class}, \ref{objects}:
+\begin{verbatim}
+    // Assigning an anonymous function to a constant
+    const add = (a, b) => a + b;
+    const subtract = (a, b) => a - b;
+    const multiply = (a, b) => a * b;
+
+    // A function that returns the appropriate operation
+    // function according to the opString
+    const chooseOperation = (opString) => {
+        // Using an object to store the functions
+        // keyed by their opString
+        const ops = {
+            "+": add,
+            "-": subtract,
+            "*": multiply
+        };
+        return ops[opString];
+    }
+
+    // A function that takes an operation
+    // and its two arguments as arguments
+    // and applies the operation to these arguments
+    const applyOperation = (op, a, b) => op(a, b);
+
+    const expr1 = "1 + 2";
+    const expr2 = "2 * 3";
+    const expr3 = "3 - 2";
+
+    // For..of loop
+    for (const expr of [expr1, expr2, expr3]) {
+        // Destructuring assignment
+        let [a, op, b] = expr.split(" ");
+        // Dynamic typing, can change the value type
+        // at runtime
+        a = parseInt(a);
+        b = parseInt(b);
+        op = chooseOperation(op);
+        console.log(applyOperation(op, a, b));
+    }
+
+    // Expected output:
+    // 3
+    // 6
+    // 1
+\end{verbatim}
+
+\subsection{Spread syntax in different contexts}
+The spread syntax discussed in \ref{spread_syntax} can be used consistently in different contexts.
+It can be used to merge objects:
+\begin{verbatim}
+    const a = { fruit: "apple" };
+    const b = { vegetable: "potato" }
+    const c = { ...a, ...b };
+    console.log(c);
+    // { fruit: "apple", vegetable: "potato" }
+\end{verbatim}
+Since an array is an object, the spread syntax can be used to merge an array:
+\begin{verbatim}
+    const a = [1, 2, 3];
+    const b = [4, 5, 6];
+    const c = [...a, ...b];
+    console.log(c);
+    // [1, 2, 3, 4, 5, 6]
+\end{verbatim}
+It can be used to make a function accept an infinite number of parameters:
+\begin{verbatim}
+    // reduce is another functional programming
+    // inspired function
+    const multiply = (...xs) =>
+        xs.reduce((acc, x) => acc * x, 1);
+
+    console.log(multiply(2, 3)); // 6
+    console.log(multiply(2, 3, 4)); // 24
+\end{verbatim}
+
+\subsection{Destructuring assignment in different contexts}
+Likewise, the destructuring assignment can be used consistently in different contexts.
+It can be in iterators like for..of:
+\begin{verbatim}
+    const objects = [
+        { fruit: "apple", vegetable: "potato" },
+        { fruit: "banana", vegetable: "pea" },
+        { fruit: "pineapple", vegetable: "okra" }
+    ];
+
+    // Destructuring fruit and vegetable
+    // from each object
+    for ({ fruit, vegetable } of objects) {
+        console.log(
+            "The fruit is "
+            + fruit +
+            " and the vegetable is " + vegetable
+        );
+    }
+    // Expected output:
+    // The fruit is apple and the vegetable is potato
+    // The fruit is banana and the vegetable is pea
+    // The fruit is pineapple and the vegetable is okra
+\end{verbatim}
+It can be used in function parameters:
+\begin{verbatim}
+    const sayFoodInfo = ({ fruit, vegetable }) => {
+        console.log(
+            "The fruit is "
+            + fruit
+            + " and the vegetable is "
+            + vegetable
+        );
+    }
+
+    sayFoodInfo({ fruit: "date", vegetable: "tomato" })
+    // Expected output:
+    // The fruit is date and the vegetable is tomato
+\end{verbatim}
+
+\subsection{Destructuring assignment in tandem with spread operator}
+The destructuring assignment can be used in tandem with the spread operator to
+destructure the first n items of an array and put the remaining items in a second array
+where n is the number of variables not preceded by "..." in the destructuring assignment.
+
+Consider the following recursive function that gets the last element in an array:
+\begin{verbatim}
+    const tail = ([x, ...xs]) => {
+
+    }
+\end{verbatim}
 
 \end{document}

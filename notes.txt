@@ -60,6 +60,7 @@
         - Arrow function without brackets in single parameters
     - Different ways of handling asynchronous code
     - Different ways of accessing/setting object members
+        - Key in literal object with or without quotations
         - Member name with/without quotations
         - Keeping/discarding member value when the name and the value are the same
         - Functions
