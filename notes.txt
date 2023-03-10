@@ -48,10 +48,16 @@
         - `this` keyword is used to refer to the current object
         - Using the `new` operator `this` is bound to an empty object
         - In normal functions `this` is bound to the object before the dot
-        - In arrow functions `this` is bound to the enclosing context from which the function was called
+        - In arrow functions `this` is bound to the enclosing context
         - https://stackabuse.com/arrow-functions-in-javascript/`
     - Different ways of defining variables (let, const, var, none)
-    - ==, ===
+        - Let: variables that are limited to the scope of the block statement
+        - const: constants that are limited to the scope of the block statement
+        - var: variables whose declarations are processed before any code is executed
+    - Strict equality, loose equality and sameness
+        - === does not do type conversion, NaN != NaN, +0 == -0
+        - == does type conversion, NaN != NaN, +0 == -0
+        - Object.is() does not do type conversions, NaN is NaN, +0 is not -0
     - Different ways of defining a function
         - Traditional function
         - Method
@@ -59,6 +65,9 @@
         - Arrow function without return in direct return
         - Arrow function without brackets in single parameters
     - Different ways of handling asynchronous code
+        - Callbacks (setTimeout)
+        - Promises .then() (promise.resolve)
+        - async/await
     - Different ways of accessing/setting object members
         - Key in literal object with or without quotations
         - Member name with/without quotations

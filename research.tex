@@ -207,12 +207,14 @@ and returns an array that is the result of applying the function on each element
 JavaScript also has a filter function that, given an array and a unary function,
 returns a new array containing the elements on which the unary function returns true:
 \begin{verbatim}
-    const even = [1, 2, 3, 4, 5].filter(x => x % 2 == 0);
+    const even = [1, 2, 3, 4, 5].filter(x => x % 2 === 0);
+    console.log(even);
+    // Expected output: [2, 4]
 \end{verbatim}
 
 \section{Orthogonality}
 Orthogonality is the ability to combine different constructs in a meaningful way without the need for special handling.
-I discuss some examples of orthogonality in JavaScript
+I discuss some examples of orthogonality and lack of thereof in JavaScript:
 
 \subsection{\label{objects}Objects}
 JavaScript contains seven primitive data types: string, number, bigint, boolean, symbol, undefined and null.
@@ -246,7 +248,7 @@ In fact, the arrow function example in \ref{arrow_functions}
 assigns an anonymous function (a function without a name) to a constant (power1, power2, power3).
 
 This is a functional programming principle known as "functions as first-class citizens".
-I have briefly hinted to this principle in \ref{fp_functions}.
+Section \ref{fp_functions} briefly hints to this principle.
 The following is an example that shows features that have been discussed in
 \ref{arrow_functions}, \ref{dynamic_typing}, \ref{for_of_for_in}, \ref{functions_first_class}, \ref{objects}:
 \begin{verbatim}
@@ -364,8 +366,8 @@ It can be used in function parameters:
     // The fruit is date and the vegetable is tomato
 \end{verbatim}
 
-\subsection{Destructuring assignment in tandem with spread operator}
-The destructuring assignment can be used in tandem with the spread operator to
+\subsection{Destructuring assignment in tandem with spread syntax}
+The destructuring assignment can be used in tandem with the spread syntax to
 destructure the first n items of an array and put the remaining items in a second array
 where n is the number of variables not preceded by `...' in the destructuring assignment.
 
@@ -386,7 +388,7 @@ Consider the following function that gets the last element in an array without u
         if (y === undefined)
             return x;
         // Still no base cases
-        // Tail is the last of the remaining elements
+        // last is the last of the remaining elements
         return last(xs);
     }
 
@@ -400,7 +402,7 @@ If the value is a non-primitive data type, it either returns `object' or
 `function'\footnote{It does that although a function is an object, but that is another matter I will not discuss.}
 
 One special case is `typeof null' or `typeof someNullishVariable'; it returns `object'.
-This is a bug in the language's implementations that was not fixed for backward compatibility.
+This is a bug in the language's implementations that was not fixed due to the need for backward compatibility.
 `typeof null' should be null since null is a primitive data type.
 
 This leads to a lack of orthogonality when checking for nullish variables:
@@ -422,6 +424,106 @@ This leads to a lack of orthogonality when checking for nullish variables:
     // a is undefined
     // a is null
     // a is another data type
+\end{verbatim}
+
+\section{Simplicity}
+A programming language is simple if it consists of a small set of constructs to be learnt.
+Because JavaScript is a fast-growing language with focus on backward compatibility,
+many sacrifices to simplicity had to be made.
+There exists many methods of doing the same thing in JavaScript.
+A JavaScript programmer is expected to know many of them in order to be able to read JavaScript codebases.
+The following are some examples of lack of simplicity in JavaScript:
+
+\subsection{`this' keyword}
+`this' keyword in JavaScript is used to refer to the current object but it behaves differently depending on where
+it is used as shown in the following examples:
+
+\subsubsection{`this' keyword in traditional functions}
+The example in section \ref{objects} used `this' keyword to refer to the object in the `sayName' method.
+The following modification to the example, however, will produce a wrong result:
+\begin{verbatim}
+    const obj = {
+        name: "foo",
+        sayName() {
+            console.log("My name is " + this.name)
+        }
+    };
+
+    const sayName = obj.sayName;
+    sayName(); // My name is [different output]
+\end{verbatim}
+
+The last two lines in the code snippet were modified to assign the `obj.sayName' function to a constant,
+and call the function using this constant.
+The correct name was not outputted since `this' did not get bounded to the object.
+
+When using traditional functions (not arrow functions) inside the object and calling them,
+`this' gets bound to the object before the dot in the call.
+In the above case, there was no object before the dot; hence it was bound to the global window object.
+In fact, if the global window object contains a name property, it will be used:
+\begin{verbatim}
+    const obj = {
+        name: "foo",
+        sayName() {
+            console.log("My name is " + this.name);
+        }
+    };
+
+    window.name = "fake";
+
+    const sayName = obj.sayName
+    sayName(); // My name is fake
+\end{verbatim}
+
+\subsubsection{`this' keyword in arrow functions}
+When using arrow functions inside an object and calling them, `this' is not bound to the function,
+but rather gets its value from the outer scope:
+
+\begin{verbatim}
+    const obj = {
+        name: "foo",
+        sayName: () => {
+            console.log("My name is " + this.name);
+        }
+    };
+
+    window.name = "fake";
+    obj.sayName(); // My name is fake
+\end{verbatim}
+In the above example, no value got bound to `this' in `sayName'; so the global `window' object was used.
+
+The following example uses a traditional function in `sayName' that
+returns an arrow function (\ref{functions_first_class}) which uses `this'.
+\begin{verbatim}
+    const obj = {
+        name: "foo",
+        sayName() {
+            return () => {
+                console.log("My name is " + this.name);
+            }
+        }
+    };
+
+    window.name = "fake";
+    (obj.sayName())(); // My name is foo
+\end{verbatim}
+It produces the correct output since `this' got bound to `obj' in the traditional function,
+and took the value of `obj' in the returned arrow function.
+
+\subsubsection{`this' keyword with `new'}
+When using the `this' inside a traditional function and using the `new' operator while calling this function,
+`this' gets bound to a new empty object which the function automatically returns.
+The type of function that is used solely for this purpose is known as a `constructor':
+\begin{verbatim}
+    function Obj() {
+        this.name = "foo";
+        this.sayName = () => {
+            console.log("My name is " + this.name);
+        }
+    }
+
+    const obj = new Obj();
+    obj.sayName(); // My name is foo
 \end{verbatim}
 
 \end{document}
