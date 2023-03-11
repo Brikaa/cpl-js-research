@@ -1,8 +1,8 @@
 \documentclass[11pt,a4paper]{article}
-\usepackage{hyperref}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
 
 \begin{document}
-\title{Evaluation of different JavaScript characteristics}
+\title{Evaluation of different JavaScript language design characteristics}
 \author{Omar Adel Brikaa - 20206043\thanks{Omar Adel Abdel Hamid Ahmed Brikaa - S5 - brikaaomar@gmail.com}}
 \date{}
 \maketitle
@@ -10,11 +10,14 @@
 \tableofcontents
 
 \section{Introduction}
-Javascript is a dynamically-typed, multi-purpose, multi-paradigm programming language.
+JavaScript is a dynamically-typed, multi-purpose, multi-paradigm programming language.
 It has been mainly used to run client-side code on web browsers.
 It has also grown into other areas of programming such as web server back-end programming\footnote{https://nodejs.org/en/}.
-In this article, I evaluate some different characteristics of JavaScript including:
+In this article, I evaluate some different characteristics of JavaScript language design including:
 types, expressivity, orthogonality, simplicity, syntax design and exception handling.
+
+The code examples in the article were tested in a chromium-based\\browser and might not work in NodeJS and other back-end
+runtimes due to the lack of the global `window' object.
 
 \section{Types}
 
@@ -75,7 +78,7 @@ When a type can not be coerced into another type, JavaScript throws a TypeError 
 
 \section{Expressivity}
 Expressivity is the ability to perform multiple computations using compact syntax.
-Following are some examples of expressivity in Javascript:
+Following are some examples of expressivity in JavaScript:
 
 \subsection{Compound assignment operators}
 Like many other programming languages, JavaScript supports assigning a value to a variable based on its previous value
@@ -146,23 +149,23 @@ ES6\footnote{https://en.wikipedia.org/wiki/ECMAScript}. The new arrow function s
 different from the traditional function syntax; there are other differences which are discussed in other sections:
 \begin{verbatim}
     // Traditional syntax
-    function power(a) {
+    function square(a) {
         return a * a;
     }
 
     // Arrow function
-    const power1 = (a) => {
+    const square1 = (a) => {
         return a * a;
     }
 
     // The curly braces can be omitted
     // Since the function directly returns a value
-    const power2 = (a) => a * a;
+    const square2 = (a) => a * a;
 
     // The parentheses around the parameter
     // can also be omitted since it is only
     // one parameter
-    const power3 = a => a * a;
+    const square3 = a => a * a;
 \end{verbatim}
 
 \subsection{\label{for_of_for_in}for..of, for..in}
@@ -245,7 +248,7 @@ Functions can be treated as any other object.
 They can be assigned to variables and constants, passed to other functions as parameters
 and returned from other functions.
 In fact, the arrow function example in \ref{arrow_functions}
-assigns an anonymous function (a function without a name) to a constant (power1, power2, power3).
+assigns an anonymous function (a function without a name) to a constant (square1, square2, square3).
 
 This is a functional programming principle known as "functions as first-class citizens".
 Section \ref{fp_functions} briefly hints to this principle.
@@ -526,7 +529,7 @@ The type of function that is used solely for this purpose is known as a `constru
     obj.sayName(); // My name is foo
 \end{verbatim}
 
-\subsection{Different ways of defining variables}
+\subsection{\label{defining_variables}Different ways of defining variables}
 JavaScript variables can be defined in four ways as follows:
 
 \subsubsection{Using const}
@@ -650,12 +653,12 @@ and returns false when +0 is compared to -0.
 \end{verbatim}
 
 \subsection{Different ways of defining a function}
-The example in \ref{arrow_functions} shows four different ways of defining a power function in JavaScript:
+The example in \ref{arrow_functions} shows four different ways of defining a square function in JavaScript:
 traditional function, arrow function, arrow function without braces in direct return,
 and arrow function without parentheses around the unary parameter.
 There is at least one more way of defining this function (anonymous function without arrow):
 \begin{verbatim}
-    const power = function(a) {
+    const square = function(a) {
         return a * a;
     }
 \end{verbatim}
@@ -711,6 +714,129 @@ Accessing the `obj' object values in the previous section:
 \begin{verbatim}
     console.log(obj.name); // foo
     console.log(obj["age"]); // 14
+\end{verbatim}
+
+\section{Syntax design}
+The syntax design of a programming language impacts its readability.
+If a programming language has meaningful identifier names and special words, the readability increases.
+Due to JavaScript's fast-growing nature and strive for backward compatibility,
+some syntax design choices were not meaningful while others were.
+The following are some examples of syntax design characteristics in JavaScript:
+
+\subsection{let, var, const have misleading meanings}
+`let', `var', `const' have been discussed in \ref{defining_variables} from a simplicity perspective.
+In the following subsections, I discuss them from a syntax design perspective:
+
+\subsubsection{var}
+`var' is used to hoist a variable;
+that is, the declaration becomes local to the function scope and executes before any code is executed.
+However, the keyword `var' is shorthand for `variable' which means a name associated with a value that can change.
+The keyword does not hint at the fact that the variable is hoisted.
+
+This is mainly because `var' was the only way to declare a JavaScript variable till 2015,
+and hoisting was how JavaScript variables were declared.
+With the introduction of new ways to declare variables such as `let' and `const',
+the `var' keyword was not changed due to the desire maintain backward compatibility.
+
+\subsubsection{let}
+`let' is used to declare a block-scoped variable.
+It is inspired from the mathematical keyword `let' as in: "let x be a number",
+and from other programming languages.
+
+The keyword `let' does not hint at the fact that the variable is block-scoped,
+it was picked because JavaScript needed another keyword than
+`var'\footnote{\raggedright \url{https://stackoverflow.com/questions/37916940/
+        why-was-the-name-let-chosen-for-block-scoped-variable-declarations-in-javascri}}.
+
+\subsubsection{const}
+`const' is used to declare a block-scoped constant.
+However, unlike constants in other languages,
+a constant in JavaScript means a name that can not be changed through reassignment.
+Therefore, the properties of a `const' object and the items in a `const'
+array\footnote{This follows that an array is an object whose properties are its items (\ref{objects}).}
+can be changed:
+\begin{verbatim}
+    const x = 3;
+    // x += 2; is not possible since it reassigns const x
+
+    const arr = [1, 2, 3];
+    arr[1] = 5;
+    // possible - modifying the property of an object (array)
+    arr.push(4);
+    // possible - adding a property to an object (array)
+    console.log(arr); // [1, 5, 3, 4]
+\end{verbatim}
+
+\subsection{Problematic automatic semicolon insertion}
+In JavaScript, a semicolon is required after each statement; however,
+if the programmer does not provide a semicolon, JavaScript will try to insert one automatically
+It is usually recommended to always put a semicolon after each statement because
+the automatic semicolon insertion (ASI) could be problematic; consider the following example:
+\begin{verbatim}
+    function square(a) {
+        return
+            a * a
+    }
+
+    console.log(square(2)); // undefined
+\end{verbatim}
+This happens because ASI is triggered after the `return' keyword,
+and hence `a * a' becomes dead code and the function does not return anything.
+
+Consider the following example where ASI is not triggered leading to possibly unexpected behavior:
+\begin{verbatim}
+    const say = (x) => {
+        console.log(x)
+        return x
+    }
+
+    // No ASI between Line X and Line Y
+    const tell = say // Line X
+    (1).toString() // Line Y
+    // Program outputs "1"
+\end{verbatim}
+The program will output "1" although it might seem that we did not call the `say' function which has the `console.log'.
+In addition to that, the variable `tell' now holds the value `1';
+while a programmer might expect it to hold the function `say'.
+This is because `Line X' and `Line Y' got translated to:
+\begin{verbatim}
+    const tell = say(1).toString();
+\end{verbatim}
+
+\subsection{Re-assigning variables that are exposed by JavaScript}
+JavaScript exposes some variables such as the global `window' object
+which represents the window in which a script is running,
+and the `arguments' object which is exposed to all functions and represents the arguments passed to them.
+These variables can be re-assigned in JavaScript which can decrease readability.
+
+Consider the following example which reassigns the arguments object.
+\begin{verbatim}
+    function normalArguments(a) {
+        console.log(arguments[0]);
+        console.log(a);
+    }
+
+    function modifiedArguments(a) {
+        arguments[0] = "fake";
+        console.log(arguments[0]);
+        console.log(a);
+    }
+
+    function reassignedArguments(a) {
+        arguments = ["fake"];
+        console.log(arguments[0])
+        console.log(a);
+    }
+
+    normalArguments("foo");
+    // foo
+    // foo
+    modifiedArguments("foo");
+    // fake
+    // fake
+    reassignedArguments("foo");
+    // fake
+    // foo
 \end{verbatim}
 
 \end{document}
