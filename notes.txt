@@ -83,8 +83,8 @@
     - Optional semicolon
     - Special words as variable names?
         - Yes, but some built-in variables which can be overridden (document, arguments, window)
-    - Curly braces?
 - Exception handling
-    - Exists?
-    - Try catch throw?
-    - Effect of lack of type safety
+    - throw
+    - try..catch
+    - finally
+    - Effect of dynamic typing on detecting the error type

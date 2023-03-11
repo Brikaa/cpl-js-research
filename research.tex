@@ -13,11 +13,12 @@
 JavaScript is a dynamically-typed, multi-purpose, multi-paradigm programming language.
 It has been mainly used to run client-side code on web browsers.
 It has also grown into other areas of programming such as web server back-end programming\footnote{https://nodejs.org/en/}.
-In this article, I evaluate some different characteristics of JavaScript language design including:
+This article, evaluates some different characteristics of JavaScript language design including:
 types, expressivity, orthogonality, simplicity, syntax design and exception handling.
 
 The code examples in the article were tested in a chromium-based\\browser and might not work in NodeJS and other back-end
 runtimes due to the lack of the global `window' object.
+The article discusses some features which were introduced in ES6\footnote{https://en.wikipedia.org/wiki/ECMAScript}.
 
 \section{Types}
 
@@ -145,7 +146,7 @@ More powerful usages of the spread syntax are discussed in other sections.
 
 \subsection{\label{arrow_functions}Arrow functions}
 JavaScript uses the `function' keyword to define a function; however, a more concise syntax has been introduced in
-ES6\footnote{https://en.wikipedia.org/wiki/ECMAScript}. The new arrow function syntax is not only syntactically
+ES6. The new arrow function syntax is not only syntactically
 different from the traditional function syntax; there are other differences which are discussed in other sections:
 \begin{verbatim}
     // Traditional syntax
@@ -217,7 +218,7 @@ returns a new array containing the elements on which the unary function returns 
 
 \section{Orthogonality}
 Orthogonality is the ability to combine different constructs in a meaningful way without the need for special handling.
-I discuss some examples of orthogonality and lack of thereof in JavaScript:
+The following sections discuss some examples of orthogonality and lack of thereof in JavaScript:
 
 \subsection{\label{objects}Objects}
 JavaScript contains seven primitive data types: string, number, bigint, boolean, symbol, undefined and null.
@@ -725,7 +726,7 @@ The following are some examples of syntax design characteristics in JavaScript:
 
 \subsection{let, var, const have misleading meanings}
 `let', `var', `const' have been discussed in \ref{defining_variables} from a simplicity perspective.
-In the following subsections, I discuss them from a syntax design perspective:
+The following subsections, discuss them from a syntax design perspective:
 
 \subsubsection{var}
 `var' is used to hoist a variable;
@@ -745,7 +746,7 @@ and from other programming languages.
 
 The keyword `let' does not hint at the fact that the variable is block-scoped,
 it was picked because JavaScript needed another keyword than
-`var'\footnote{\raggedright \url{https://stackoverflow.com/questions/37916940/
+`var'\footnote{\raggedright \url{https://stackoverflow.com/questions/37916940/%
         why-was-the-name-let-chosen-for-block-scoped-variable-declarations-in-javascri}}.
 
 \subsubsection{const}
@@ -838,5 +839,63 @@ Consider the following example which reassigns the arguments object.
     // fake
     // foo
 \end{verbatim}
+
+\section{Exception handling}
+Exception handling is the ability of a program to intercept runtime errors, take corrective actions and
+proceed\footnote{\raggedright
+    \url{https://github.com/aminallam/aminallam.github.io/blob/master/pdf/concepts/Lecture01_Introduction.pdf}
+}.
+
+In JavaScript,
+The code that is expected to raise an exception is surrounded with try..catch, try..finally or try..catch..finally.
+JavaScript tries to execute the code in the `try' block.
+
+If the code raises an exception, the control flow is moved to the catch block.
+The code in the finally block executes regardless whether the code raised an exception or didn't
+and whether there existed a catch block that caught this exception or not.
+
+The `throw' statement can be used to throw a user-defined exception.
+\begin{verbatim}
+    class MyException {}
+
+    const throwExceptions = (a) => {
+        try {
+            a.toUpperCase();
+            if (a == "foo")
+                throw new MyException();
+            x();
+        } catch (e) {
+            // a.toUpperCase() fails
+            if (e instanceof TypeError)
+                console.log("Bad type");
+            // "throw new MyException()" executes
+            else if (e instanceof MyException)
+                console.log("Bad value");
+            // x(); throws a ReferenceError
+            else {
+                console.log("Unknown");
+                throw e;
+            }
+        } finally {
+            console.log("Cleaning up");
+        }
+    }
+
+    throwExceptions(1);
+    // Bad type
+    // Cleaning up
+    throwExceptions("foo");
+    // Bad value
+    // Cleaning up
+    throwExceptions("bar");
+    // Unknown
+    // Cleaning up
+    // ERROR (ReferenceError)
+\end{verbatim}
+Notice that due to JavaScript's dynamic typing,
+we had to use if conditions to check for the exception type after catching it
+and to re-throw it if it is an unexpected type.
+This is different to how exceptions are caught in languages like C++ and Java
+where the exception type is mentioned explicitly in the catch statement.
 
 \end{document}
