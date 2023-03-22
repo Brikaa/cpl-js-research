@@ -1,0 +1,92 @@
+JavaScript is an interpreted multi-purpose language.
+Despite the fact that it is interpreted, the JavaScript engine can do some performance optimizations before runtime.
+This research uses the JavaScript ES6 standards.
+
+1.1. Dynamic type binding
+The JavaScript interpreter assigns a variable a changeable type at runtime based on its context.
+When defining functions, the parameter types are determined at runtime at each call.
+Arrays can have elements of different types.
+
+1.2. Weak typing and type checking
+When the types of variables mismatch, the interpreter tries to convert the type of one variable into the other.
+Even strings can be coerced into numbers and vice-versa (1 + "2" = "12").
+When a type can not be coerced into another type, JavaScript throws a TypeError at runtime (12(), 12 is not a function).
+
+2. Expressivity
+JavaScript has several operators and functions that allow multiple computations to be performed with compact syntax:
+
+2.1. Destructuring assignment (interesting operator)
+If we want to assign some values in an array to variables, we can do so with a shorthand syntax:
+```
+let arr = [1, 2, 3];
+let [a, b, c] = arr;
+```
+This assigns a, b, c to 1, 2, 3 respectively instead of explicitly declaring that a is arr[0], b is arr[1] and so on.
+A similar syntax works with objects.
+
+2.2. Spread syntax (interesting operator)
+If we want to spread an array into another array, we can do so expressively with the spread syntax:
+```
+let a = [2,3,4];
+console.log([1, ...a, 5, 6]); // expected output: [1, 2, 3, 4, 5, 6]
+```
+
+3.7. Functional-programming-inspired functions
+JavaScript has multiple functions that are inspired by expressive functions in functional programming languages like Haskell.
+For example, the map function takes an array and a unary function and returns an array that is
+the result of applying the function on each element in the given array:
+```
+let arr = [1, 2, 3].map(x => x * 2);
+```
+The value of `arr` will be [2, 4, 6].
+JavaScript also has a filter function that, given an array and a unary function,
+returns a new array containing the elements on which the unary function returns true.
+
+3. Lack of orthogonality (typeof null)
+The `typeof` JavaScript operator returns the type of a value as a string.
+If the value is a primitive data type (one of: number, string, boolean, bigint, symbol, null, undefined),
+it returns the name of that data type.
+If the value is a non-primitive data type, it either returns `object` or `function`.
+
+One special case is `typeof null`; it returns `object`.
+This is a bug in the language`s implementations that was not fixed due to the need for backward compatibility.
+`typeof null` should be null since `null` is a primitive data type.
+
+The programmer has to be aware that checking null types is done differently.
+They should compare the nullish value directly against null (someNullishValue === null).
+
+4. Syntax design
+Due to JavaScript's fast-growing nature and strive for backward compatibility,
+some syntax design choices were not meaningful, as shows in the following examples:
+
+4.1. let, var, const have misleading meanings
+`var` is used to hoist a variable; that is, the declaration becomes local to
+the function scope and executes before any code is executed.
+However, the keyword `var` is shorthand for `variable`. The keyword does not hint at the fact that
+the variable is hoisted.
+`let` is used to declare a block-scoped variable.
+It is inspired from the mathematical keyword `let`.
+It does not hint at the fact that the variable is block-scoped (or that it is different from var)
+`const` is used to declare a block-scoped constant. However, unlike constants
+in other languages, a constant in JavaScript means a name that can not be
+changed through reassignment.
+
+4.2. Re-assigning variables that are exposed by JavaScript
+JavaScript exposes some variables such as the global `window` object which
+represents the window in which a script is running, and the `arguments`
+object which is exposed to all functions and represents the arguments passed
+to them.
+These variables can be re-assigned in JavaScript which can decrease readability.
+
+5. Exception handling
+In JavaScript, the code that is expected to raise an exception is surrounded with
+try..catch, try..finally or try..catch..finally.
+JavaScript tries to execute the code in the `try` block.
+If the code raises an exception, the control flow is moved to the `catch` block.
+The code in the finally block executes regardless whether the code raised an exception or didn't
+and whether there existed a catch block that caught this exception or not.
+
+Due to JavaScript’s dynamic typing, we have to use if conditions
+to check for the exception type after catching it and to re-throw it if it is an unexpected type.
+This is different to how exceptions are caught in languages like C++ and Java
+where the exception type is mentioned explicitly in the catch statement.

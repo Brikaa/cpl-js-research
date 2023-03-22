@@ -1,4 +1,4 @@
-- Compressed version should be less than 700 words
+- Compressed version should be about 700 - 750 words
 
 - Types
     - JS is dynamically typed
@@ -10,6 +10,19 @@
     - Type checking
         - Checks for type errors at runtime
         - Accessing properties of null, undefined, calling non-functions
+- Storage binding
+    - Implicit heap-dynamic variables
+        - Except for some variables that can be preprocessed by the JavaScript engine before runtime
+            and allocated on the stack
+    - Garbage collection
+        - When nothing references the variable on the heap anymore
+- Side effects
+    - A function can modify variables defined in its enclosing scope
+    - Functions can modify objects that parameters point to
+        - This is different from call by reference in C++
+        - Swap is impossible in JavaScript
+    - Operators in JavaScript (including function calls) evaluate their operands from left to right
+- Named constants
 - Expressivity
     - Compound assignment operators
     - Postfix, prefix increment, decrement
