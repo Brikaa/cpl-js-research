@@ -9,19 +9,19 @@ Even strings can be coerced into numbers and vice-versa (1 + "2" = "12"). This i
 When a type can not be coerced into another type, JavaScript throws a TypeError at runtime (12(), 12 is not a function).
 
 Dynamic storage binding :-
-Most variables in JavaScript are implicit heap-dynamic variables since they bind to both type and storage when they are
+Most variables in are implicit heap-dynamic variables since they bind to both type and storage when they are
 assigned values.
 Pointers to these variables are stored on the stack.
 The JavaScript engine can do optimizations before runtime and choose to allocate some variables on the stack.
-If a variable on the heap is not referenced anymore, the JavaScript garbage collector deallocates it.
+If a variable on the heap is not referenced anymore, the garbage collector deallocates it.
 
 Side effects :-
 A function can modify non-local variables, and it can modify objects its parameters are pointing to.
 Note that this is different from pass-by-reference in C++ since the actual references are not modified.
-It is impossible to do swap(x, y) in JavaScript. But it is possible to do sort(arr).
+It is impossible to do swap(x, y) in JavaScript, but it is possible to do sort(arr).
 
 Named constants :-
-Although the `const` keyword exists in JavaScript, it neither means 'named constant' nor 'read-only'.
+Although the `const` keyword exists, it neither means 'named constant' nor 'read-only'.
 It means a variable can not be re-assigned.
 Therefore, one can change the elements of a const array, but can not reassign it to a new array.
 
@@ -41,7 +41,7 @@ console.log([1, ...a, 5, 6]); // expected output: [1, 2, 3, 4, 5, 6]
 ```
 
 Lack of orthogonality :-
-The `typeof` JavaScript operator returns the type of a value as a string.
+The `typeof` operator returns the type of a value as a string.
 If the value is a primitive data type (one of: number, string, boolean, bigint, symbol, null, undefined),
 it returns (should return) the name of that data type.
 If the value is a non-primitive data type, it either returns `object` or `function`.
@@ -65,8 +65,8 @@ It does not hint at the fact that the variable is block-scoped (or that it is di
 `const` is used to declare a block-scoped constant.
 However, it is not like constants in other languages as discussed in (Named constants).
 
-The programmer can choose not to insert a semicolon at the end of a JavaScript statement and only insert a new line.
-The JavaScript engine will automatically insert a semi-colon.
+The programmer can choose not to insert a semicolon at the end of a statement and only insert a new line.
+The engine will automatically insert a semi-colon.
 However, this causes ambiguity if two lines are legal with or without a semicolon between them.
 ```
 return  // semicolon automatically inserted here (unintended)
