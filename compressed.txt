@@ -4,74 +4,77 @@ When defining functions, the parameter types are determined at runtime at each c
 Arrays can have elements of different types.
 
 Type checking :-
-When the types of variables mismatch, the interpreter tries to convert the type of one variable into the other.
-Even strings can be coerced into numbers and vice-versa (1 + "2" = "12"). This is known as weak typing
-When a type can not be coerced into another type, JavaScript throws a TypeError at runtime (12(), 12 is not a function).
+If the interpreter receives a type inequivalent to the expected, it tries to coerce it into the expected (weak typing).
+Even strings can be coerced into numbers and vice-versa (1 + "2" === "12").
+When a type can not be coerced, JavaScript throws a TypeError at runtime (12(), 12 is not a function).
 
 Dynamic storage binding :-
-Most variables in are implicit heap-dynamic variables since they bind to both type and storage when they are
-assigned values.
-Pointers to these variables are stored on the stack.
-The JavaScript engine can do optimizations before runtime and choose to allocate some variables on the stack.
-If a variable on the heap is not referenced anymore, the garbage collector deallocates it.
+Most variables are implicit heap-dynamic; they bind to both type and storage when they are assigned values.
+Pointers to these variables are allocated on the stack.
+The JS engine can do optimizations before runtime and choose to allocate some variables on the stack.
+If a heap variable is not referenced anymore, the garbage collector releases its memory.
 
 Side effects :-
 A function can modify non-local variables, and it can modify objects its parameters are pointing to.
 Note that this is different from pass-by-reference in C++ since the actual references are not modified.
-It is impossible to do swap(x, y) in JavaScript, but it is possible to do sort(arr).
+That is, it is impossible to do swap(x, y) in JavaScript, but it is possible to do sort(arr).
 
 Named constants :-
 Although the `const` keyword exists, it neither means 'named constant' nor 'read-only'.
 It means a variable can not be re-assigned.
 Therefore, one can change the elements of a const array, but can not reassign it to a new array.
 
-Expressivity and interesting operators :-
-If we want to assign some values in an array to variables, we can do so with the shorthand destructuring assignment:
+Examples of interesting operators :-
+If we want to assign some values in an array to variables, we can do so with the short-hand destructuring assignment:
 ```
 let arr = [1, 2, 3];
 let [a, b, c] = arr;
 ```
-which has the same result as "a = arr[0], b = arr[1], c = arr[2]".
+which has the same effect as "a = arr[0], b = arr[1], c = arr[2]".
 A similar syntax exists with objects.
 
-If we want to spread an array into another array, we can do so expressively with the spread syntax:
+If we want to spread an array into another, we can do so expressively with the spread syntax:
 ```
 let a = [2,3,4];
 console.log([1, ...a, 5, 6]); // expected output: [1, 2, 3, 4, 5, 6]
 ```
 
 Lack of orthogonality :-
-The `typeof` operator returns the type of a value as a string.
-If the value is a primitive data type (one of: number, string, boolean, bigint, symbol, null, undefined),
-it returns (should return) the name of that data type.
-If the value is a non-primitive data type, it either returns `object` or `function`.
+The `typeof` operator returns a string representation of the type of a value.
+If it is a primitive data type (one of: number, string, boolean, bigint, symbol, null, undefined),
+it returns the name of that data type. If it is non-primitive, it either returns `object` or `function`.
 
-One special case is `typeof null`; it returns `object`.
-This is a bug in the language's implementations that was not fixed for backward compatibility.
-`typeof null` should be null since `null` is a primitive data type.
+One special case is `typeof null`; it returns `object`. It should return null since `null` is primitive.
+This is a bug in JS's implementations that was not fixed for backward compatibility reasons.
 
 The programmer has to be aware that checking null types is done differently.
-They should compare the nullish variable directly against null (someNullishVar === null).
+They should compare the nullish variable directly against null: (x === null) instead of (typeof x === null).
 
 Syntax design problems :-
-`var` is used to hoist a local variable; that is, the declaration executes before any code in the function is executed.
+`var` is used to define a hoisted function-scoped variable;
+that is, a variable whose declaration executes before any code in the function is executed.
 However, the keyword `var` is shorthand for `variable`. The keyword does not hint at the fact that
 the variable is hoisted.
 
 `let` is used to declare a block-scoped variable.
-It is inspired from the mathematical keyword `let`.
+The keyword is inspired from the mathematical keyword `let`; as in "let x be a number".
 It does not hint at the fact that the variable is block-scoped (or that it is different from `var`)
 
 `const` is used to declare a block-scoped constant.
 However, it is not like constants in other languages as discussed in (Named constants).
 
-The programmer can choose not to insert a semicolon at the end of a statement and only insert a new line.
+Another syntax design problem is that
+the programmer can choose not to insert a semicolon at the end of a statement and only insert a new line.
 The engine will automatically insert a semi-colon.
 However, this causes ambiguity if two lines are legal with or without a semicolon between them.
 ```
 return  // semicolon automatically inserted here (unintended)
     1 + 2
 ```
+
+Furthermore, the programmer can reassign variables that JavaScript exposes
+like the `window` object which represents the window in which the script is running
+and the `arguments` object which represents the arguments sent to a function. This can decrease readability.
 
 Exception handling :-
 The code that is expected to raise an exception is surrounded with try..catch, try..finally or try..catch..finally.
@@ -82,5 +85,21 @@ and whether there existed a catch block that caught this exception or not.
 
 Due to JavaScript’s dynamic typing, we have to use if conditions
 to check for the exception type after catching it and to re-throw it if it is an unexpected type.
-This is different to how exceptions are caught in languages like C++ and Java
+This is different to how exceptions are caught in some static languages like C++ and Java
 where the exception type is mentioned explicitly in the catch statement.
+
+Expressivity:
+The map function takes an array and a unary function and returns an array that is
+the result of applying the function on each element in the given array:
+```
+let arr = [1, 2, 3].map(x => x * 2); // arr is now [2, 4, 6]
+```
+The filter function takes an array and a unary function and
+returns a new array containing the elements on which the unary function returns true:
+```
+let even = [1, 2, 3, 4, 5].filter(x => x % 2 === 0); // even is now [2, 4]
+```
+for..of can be used to iterate over an array instead of a traditional for-loop with a counter and indexing:
+```
+for (const i of [1, 2, 3, 4]) { console.log(i); }
+```
