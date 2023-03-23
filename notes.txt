@@ -23,6 +23,8 @@
         - Swap is impossible in JavaScript
     - Operators in JavaScript (including function calls) evaluate their operands from left to right
 - Named constants
+    - const keyword exists, but it neither means named constants nor read-only
+    - It means a variable can not be re-assigned.
 - Expressivity
     - Compound assignment operators
     - Postfix, prefix increment, decrement

@@ -1,86 +1,80 @@
-JavaScript is an interpreted multi-purpose language.
-Despite the fact that it is interpreted, the JavaScript engine can do some performance optimizations before runtime.
-This research uses the JavaScript ES6 standards.
-
-1.1. Dynamic type binding
+Dynamic type binding :-
 The JavaScript interpreter assigns a variable a changeable type at runtime based on its context.
 When defining functions, the parameter types are determined at runtime at each call.
 Arrays can have elements of different types.
 
-1.2. Weak typing and type checking
+Type checking :-
 When the types of variables mismatch, the interpreter tries to convert the type of one variable into the other.
-Even strings can be coerced into numbers and vice-versa (1 + "2" = "12").
+Even strings can be coerced into numbers and vice-versa (1 + "2" = "12"). This is known as weak typing
 When a type can not be coerced into another type, JavaScript throws a TypeError at runtime (12(), 12 is not a function).
 
-2. Expressivity
-JavaScript has several operators and functions that allow multiple computations to be performed with compact syntax:
+Dynamic storage binding :-
+Most variables in JavaScript are implicit heap-dynamic variables since they bind to both type and storage when they are
+assigned values.
+Pointers to these variables are stored on the stack.
+The JavaScript engine can do optimizations before runtime and choose to allocate some variables on the stack.
+If a variable on the heap is not referenced anymore, the JavaScript garbage collector deallocates it.
 
-2.1. Destructuring assignment (interesting operator)
-If we want to assign some values in an array to variables, we can do so with a shorthand syntax:
+Side effects :-
+A function can modify non-local variables, and it can modify objects its parameters are pointing to.
+Note that this is different from pass-by-reference in C++ since the actual references are not modified.
+It is impossible to do swap(x, y) in JavaScript. But it is possible to do sort(arr).
+
+Named constants :-
+Although the `const` keyword exists in JavaScript, it neither means 'named constant' nor 'read-only'.
+It means a variable can not be re-assigned.
+Therefore, one can change the elements of a const array, but can not reassign it to a new array.
+
+Expressivity and interesting operators :-
+If we want to assign some values in an array to variables, we can do so with the shorthand destructuring assignment:
 ```
 let arr = [1, 2, 3];
 let [a, b, c] = arr;
 ```
-This assigns a, b, c to 1, 2, 3 respectively instead of explicitly declaring that a is arr[0], b is arr[1] and so on.
-A similar syntax works with objects.
+which has the same result as "a = arr[0], b = arr[1], c = arr[2]".
+A similar syntax exists with objects.
 
-2.2. Spread syntax (interesting operator)
 If we want to spread an array into another array, we can do so expressively with the spread syntax:
 ```
 let a = [2,3,4];
 console.log([1, ...a, 5, 6]); // expected output: [1, 2, 3, 4, 5, 6]
 ```
 
-3.7. Functional-programming-inspired functions
-JavaScript has multiple functions that are inspired by expressive functions in functional programming languages like Haskell.
-For example, the map function takes an array and a unary function and returns an array that is
-the result of applying the function on each element in the given array:
-```
-let arr = [1, 2, 3].map(x => x * 2);
-```
-The value of `arr` will be [2, 4, 6].
-JavaScript also has a filter function that, given an array and a unary function,
-returns a new array containing the elements on which the unary function returns true.
-
-3. Lack of orthogonality (typeof null)
+Lack of orthogonality :-
 The `typeof` JavaScript operator returns the type of a value as a string.
 If the value is a primitive data type (one of: number, string, boolean, bigint, symbol, null, undefined),
-it returns the name of that data type.
+it returns (should return) the name of that data type.
 If the value is a non-primitive data type, it either returns `object` or `function`.
 
 One special case is `typeof null`; it returns `object`.
-This is a bug in the language`s implementations that was not fixed due to the need for backward compatibility.
+This is a bug in the language's implementations that was not fixed for backward compatibility.
 `typeof null` should be null since `null` is a primitive data type.
 
 The programmer has to be aware that checking null types is done differently.
-They should compare the nullish value directly against null (someNullishValue === null).
+They should compare the nullish variable directly against null (someNullishVar === null).
 
-4. Syntax design
-Due to JavaScript's fast-growing nature and strive for backward compatibility,
-some syntax design choices were not meaningful, as shows in the following examples:
-
-4.1. let, var, const have misleading meanings
-`var` is used to hoist a variable; that is, the declaration becomes local to
-the function scope and executes before any code is executed.
+Syntax design problems :-
+`var` is used to hoist a local variable; that is, the declaration executes before any code in the function is executed.
 However, the keyword `var` is shorthand for `variable`. The keyword does not hint at the fact that
 the variable is hoisted.
+
 `let` is used to declare a block-scoped variable.
 It is inspired from the mathematical keyword `let`.
-It does not hint at the fact that the variable is block-scoped (or that it is different from var)
-`const` is used to declare a block-scoped constant. However, unlike constants
-in other languages, a constant in JavaScript means a name that can not be
-changed through reassignment.
+It does not hint at the fact that the variable is block-scoped (or that it is different from `var`)
 
-4.2. Re-assigning variables that are exposed by JavaScript
-JavaScript exposes some variables such as the global `window` object which
-represents the window in which a script is running, and the `arguments`
-object which is exposed to all functions and represents the arguments passed
-to them.
-These variables can be re-assigned in JavaScript which can decrease readability.
+`const` is used to declare a block-scoped constant.
+However, it is not like constants in other languages as discussed in (Named constants).
 
-5. Exception handling
-In JavaScript, the code that is expected to raise an exception is surrounded with
-try..catch, try..finally or try..catch..finally.
+The programmer can choose not to insert a semicolon at the end of a JavaScript statement and only insert a new line.
+The JavaScript engine will automatically insert a semi-colon.
+However, this causes ambiguity if two lines are legal with or without a semicolon between them.
+```
+return  // semicolon automatically inserted here (unintended)
+    1 + 2
+```
+
+Exception handling :-
+The code that is expected to raise an exception is surrounded with try..catch, try..finally or try..catch..finally.
 JavaScript tries to execute the code in the `try` block.
 If the code raises an exception, the control flow is moved to the `catch` block.
 The code in the finally block executes regardless whether the code raised an exception or didn't

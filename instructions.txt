@@ -46,13 +46,13 @@ https://docs.google.com/forms/d/e/1FAIpQLSedmblzzBLhc0hV8ZtgvTMPSho4YMXTQRHEZ6rB
 - It is allowed to skip some questions and items if you cannot find reasonable answer related to your language.
 - It is preferred to include sample source codes during the discussion.
 - You are allowed to add to the list below exactly one item which is different from lectures and not applicable to C++.
-* Discuss examples regarding expressivity.
-* Discuss examples regarding lack of orthogonality.
-* Discuss issues of syntax design which affect readability and/or writability.
-* Discuss exception handling.
-* Discuss interesting operators which do not exist in c++ (only if they exist).
-* Discuss named-constants.
-* Discuss type-binding.
-* Discuss storage-binding.
-* Discuss type-checking.
-* Discuss side-effects.
+1. Discuss examples regarding expressivity.
+2. Discuss examples regarding lack of orthogonality.
+3. Discuss issues of syntax design which affect readability and/or writability.
+4. Discuss exception handling.
+5. Discuss interesting operators which do not exist in c++ (only if they exist).
+6. Discuss named-constants.
+7. Discuss type-binding.
+8. Discuss storage-binding.
+9. Discuss type-checking.
+10. Discuss side-effects.
