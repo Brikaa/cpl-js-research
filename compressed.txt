@@ -18,6 +18,7 @@ Side effects :-
 A function can modify non-local variables, and it can modify objects its parameters are pointing to.
 Note that this is different from pass-by-reference in C++ since the actual references are not modified.
 That is, it is impossible to do swap(x, y) in JavaScript, but it is possible to do sort(arr).
+To prevent ambiguity, operators (including function calls) evaluate their operands from left to right.
 
 Named constants :-
 Although the `const` keyword exists, it neither means 'named constant' nor 'read-only'.
