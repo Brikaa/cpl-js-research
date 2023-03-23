@@ -1,3 +1,5 @@
+Omar Adel Abdel Hamid Ahmed Brikaa - 20206043 - S5 - Wed. 3rd slot - JavaScript (ES6) - brikaaomar@gmail.com
+
 Dynamic type binding :-
 The JavaScript interpreter assigns a variable a changeable type at runtime based on its context.
 When defining functions, the parameter types are determined at runtime at each call.
@@ -84,7 +86,7 @@ If the code raises an exception, the control flow is moved to the `catch` block.
 The code in the finally block executes regardless whether the code raised an exception or didn't
 and whether there existed a catch block that caught this exception or not.
 
-Due to JavaScript’s dynamic typing, we have to use if conditions
+Due to JavaScript's dynamic typing, we have to use if conditions
 to check for the exception type after catching it and to re-throw it if it is an unexpected type.
 This is different to how exceptions are caught in some static languages like C++ and Java
 where the exception type is mentioned explicitly in the catch statement.
